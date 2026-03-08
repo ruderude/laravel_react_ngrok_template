@@ -95,6 +95,8 @@ docker compose down --rmi all --volumes --remove-orphans
 docker compose up -d
 docker compose exec app npm run dev
 
+docker compose exec app php artisan test
+
 その他
 
 マイグレーションロールバック
