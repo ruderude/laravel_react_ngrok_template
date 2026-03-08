@@ -1,0 +1,47 @@
+services:
+  nginx:
+    build: ./.docker/nginx
+    volumes:
+      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./.docker/nginx/log:/var/log/nginx
+      - ./:/var/www/html
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./.docker/app/Dockerfile
+    volumes:
+      - ./:/var/www/html
+      - ./.docker/app/php.ini:/usr/local/etc/php/conf.d/key-gate.ini
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+
+  pgsql:
+    build:
+      context: ./
+      dockerfile: ./.docker/pgsql/Dockerfile
+    volumes:
+      - ./.docker/pgsql/.data:/var/lib/postgresql
+      - ./.docker/pgsql/postgresql.conf:/etc/postgresql/postgresql.conf
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE}
+    command: -c 'config_file=/etc/postgresql/postgresql.conf'
+    ports:
+      - "${DB_PORT:-5432}:5432"
+
+  ngrok:
+    build:
+      context: ./
+      dockerfile: ./.docker/ngrok/Dockerfile
+    restart: unless-stopped
+    command:
+      - "http"
+      - "nginx:${NGROK_PORT:-80}"
+      - "--domain"
+      - "${NGROK_DOMAIN}"
+      - "--authtoken"
+      - "${NGROK_AUTH_TOKEN}"
