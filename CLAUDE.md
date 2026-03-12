@@ -12,6 +12,21 @@
 - `npm install` — JS 依存インストール
 - `npm run dev` — Vite 開発サーバー起動
 - `npm run build` — 本番ビルド
+- `npm run lint` — ESLint チェック
+- `npm run lint:fix` — ESLint 自動修正
+- `npm run format` — Prettier フォーマット
+- `npm run type-check` — TypeScript 型チェック
+
+## 実装後の確認コマンド
+
+実装が完了したら以下を順に実行し、すべてパスすることを確認する。
+
+1. `docker compose exec app php artisan test` — PHP テスト全件実行
+2. `npm run format` — Prettier フォーマット
+3. `npm run lint:fix` — ESLint 自動修正
+4. `npm run lint` — ESLint チェック（残存エラーがないことを確認）
+5. `npm run type-check` — TypeScript 型チェック
+6. `npm run build` — フロントエンドビルド
 
 ## アーキテクチャ
 

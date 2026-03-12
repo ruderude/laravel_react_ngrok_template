@@ -76,8 +76,8 @@ docker compose exec app php artisan migrate
 Laravelがログやキャッシュを書き込めるように、ディレクトリの権限を調整します。
 
 docker compose exec app php artisan storage:link
-chmod -R 777 storage
-chmod -R 777 bootstrap/cache
+
+chmod -R 777 storage bootstrap/cache
 
 ※必要に応じて www-data ユーザーへの所有権変更を行ってください。
 
@@ -96,6 +96,9 @@ docker compose up -d
 docker compose exec app npm run dev
 
 docker compose exec app php artisan test
+
+※PC内に残るdockerをすべて停止して削除する
+docker rm -f $(docker ps -aq)
 
 その他
 
